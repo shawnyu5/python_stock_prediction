@@ -622,12 +622,17 @@ class Average_true_range_values:
             },
         )
 
+        self.average_true_range_values = self.average_true_range_values[0]
 
         # pprint(self.average_true_range_values)
+
+    def get_all(self):
+        return self.average_true_range_values
+
     # return the atr values
     def get_atr(self) -> list:
         values = []
-        for _, value in self.average_true_range_values[0].items():
+        for _, value in self.average_true_range_values.items():
             # print(list(value.values())[0])
             values.append(list(value.values())[0])
             # print("-------------------------------")
@@ -636,7 +641,7 @@ class Average_true_range_values:
 
     def get_dates(self):
         dates = []
-        for key in self.average_true_range_values[0].items():
+        for key in self.average_true_range_values.items():
             dates.append(key[0])
         return dates
 
