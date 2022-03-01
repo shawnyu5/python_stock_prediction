@@ -105,3 +105,7 @@ print(f" x_train: {str(x_train)}")  # __AUTO_GENERATED_PRINT_VAR__
 print(f" y_train: {str(y_train)}")  # __AUTO_GENERATED_PRINT_VAR__
 
 model.fit(x_train, y_train, epochs=50, batch_size=4, verbose=1)
+
+# testing
+
+
