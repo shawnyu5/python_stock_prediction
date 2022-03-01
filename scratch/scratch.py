@@ -1,14 +1,35 @@
-import pandas as pd
+from keras.models import Sequential
+from keras.layers import LSTM, Dense
 import numpy as np
 
-docs = {"computer": {"1": 1, "3": 5, "8": 2}, "politics": {"0": 2, "1": 2, "3": 1}}
-# Creates a dataframe with keys as index and values as cell values.
-df = pd.DataFrame(docs)
+data_dim = 16
+timesteps = 8
+num_classes = 10
 
-# Create a new set of index from min and max of the dictionary keys.
-new_index = np.arange(int(df.index.min()), int(df.index.max())).astype(str)
+# expected input data shape: (batch_size, timesteps, data_dim)
+model = Sequential()
+model.add(
+    LSTM(32, return_sequences=True, input_shape=(timesteps, data_dim))
+)  # returns a sequence of vectors of dimension 32
+model.add(
+    LSTM(32, return_sequences=True)
+)  # returns a sequence of vectors of dimension 32
+model.add(LSTM(32))  # return a single vector of dimension 32
+model.add(Dense(10, activation="softmax"))
 
-# Add the new index to the existing index and fill the nan values with 0, take a transpose of dataframe.
-new_df = df.reindex(new_index).fillna(0).T.astype(int)
+model.compile(
+    loss="categorical_crossentropy", optimizer="rmsprop", metrics=["accuracy"]
+)
 
-print(f" new_df: {str(new_df)}")  # __AUTO_GENERATED_PRINT_VAR__
+# Generate dummy training data
+x_train = np.random.random((1000, timesteps, data_dim))
+y_train = np.random.random((1000, num_classes))
+
+# Generate dummy validation data
+x_val = np.random.random((100, timesteps, data_dim))
+y_val = np.random.random((100, num_classes))
+
+x_train = x_train.reshape((x_train.shape[0], x_train.shape[1], 1))
+
+
+model.fit(x_train, y_train, batch_size=64, epochs=5, validation_data=(x_val, y_val))
